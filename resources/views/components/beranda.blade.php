@@ -1,29 +1,50 @@
-<section id="home" class="pt-32 pb-20 scroll-mt-24">
-    <div class="container mx-auto px-6 text-center">
+<section id="beranda-section"
+         class="relative py-24 md:py-32
+                bg-gradient-to-br from-[#14532d] via-[#052e16] to-[#020617]">
 
-        {{-- Judul --}}
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-6">
-            BP Transportation
-        </h1>
+    <div class="container mx-auto px-6">
 
-        {{-- Deskripsi singkat --}}
-        <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-10">
-            BP Transportation adalah layanan pengiriman barang lokal yang fokus
-            pada distribusi bahan baku dan produk jadi seperti kayu, serbuk gergaji,
-            batu bata, dan genteng dengan layanan cepat, tepat, dan terpercaya.
-        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 
-        {{-- CTA --}}
-        <div class="flex flex-col md:flex-row justify-center gap-4">
-            <a href="#etalase"
-               class="px-8 py-3 font-bold rounded-full border border-orange-500 text-orange-600 hover:bg-orange-500 hover:text-white transition">
-                Lihat Etalase
-            </a>
+            {{-- Text Content --}}
+            <div class="text-white">
 
-            <a href="#kontak"
-               class="px-8 py-3 font-bold rounded-full bg-orange-500 text-white hover:bg-orange-600 transition">
-                Hubungi Kami
-            </a>
+                <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-6">
+                    Solusi Pengiriman
+                    <span class="text-green-300">Bahan Produksi</span>
+                    Andal
+                </h1>
+
+                <p class="text-lg text-white/80 leading-relaxed mb-8">
+                    BP Transportation melayani pengiriman kayu, serbuk gergaji,
+                    batu bata, dan genteng untuk mendukung industri lokal
+                    dengan layanan tepat waktu dan terpercaya.
+                </p>
+
+                <div class="flex flex-wrap gap-4">
+                    <a href="#kontak-section"
+                       class="px-7 py-3 bg-green-800 text-white font-semibold
+                              rounded-lg hover:bg-green-700 transition">
+                        Hubungi Kami
+                    </a>
+
+                    <a href="#etalase-section"
+                       class="px-7 py-3 border border-white/30 text-white
+                              rounded-lg hover:bg-white/10 transition">
+                        Lihat Etalase
+                    </a>
+                </div>
+
+            </div>
+
+            {{-- Image Content --}}
+            <div class="relative">
+
+
+                <img src="{{ asset('images/Logo2.png') }}"
+                     alt="BP Transportation">
+            </div>
+
         </div>
 
     </div>

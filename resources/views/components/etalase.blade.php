@@ -1,4 +1,4 @@
-<section id="etalase" class="py-20 bg-white">
+<section id="etalase-section" class="py-20 bg-white">
     <div class="container mx-auto px-6">
 
         {{-- Judul --}}

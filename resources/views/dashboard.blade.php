@@ -1,24 +1,34 @@
 @extends('layouts.app')
 
+@section('title', 'BP Transportation')
+
 @section('content')
 
+    {{-- ================= HEADER / NAVBAR ================= --}}
+    @include('partials.header')
 
-    {{-- Beranda --}}
+
+    {{-- ================= BERANDA ================= --}}
     @include('components.beranda')
 
-    {{-- About --}}
+
+    {{-- ================= ABOUT ================= --}}
     @include('components.about')
 
-    {{-- Etalase --}}
-    @include('components.etalase')
 
-    {{-- Radius Pengiriman --}}
-    @include('components.location')
+    {{-- ================= LAYANAN ================= --}}
+    @include('components.layanan')
 
-    {{-- Hubungi Kami --}}
+
+    {{-- ================= LOKASI ================= --}}
+    @include('components.ketentuan')
+
+
+    {{-- ================= CONTACT ================= --}}
     @include('components.contact')
 
-    {{-- Footer --}}
+
+    {{-- ================= FOOTER ================= --}}
     @include('partials.footer')
 
 @endsection

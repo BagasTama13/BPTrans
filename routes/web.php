@@ -1,25 +1,41 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
-// ROOT URL → langsung ke dashboard publik
+// =======================
+// PUBLIC LANDING PAGE
+// =======================
 Route::get('/', function () {
-    return view('dashboard'); // ini dashboard publik
+    return view('dashboard');
 });
 
-// ADMIN ROUTES (protected)
-Route::prefix('admin')->group(function () {
-    // login
-    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
+// =======================
+// ADMIN AUTH
+// =======================
+Route::get('/admin/login', fn () => view('admin.login'));
 
-    // logout
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-    // halaman admin
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard'); // admin dashboard (buat folder admin di views)
-    })->middleware('auth');
+Route::post('/admin/login', function () {
+    if (request('username') === 'admin' && request('password') === 'admin123') {
+        session(['is_admin' => true]);
+        return redirect('/admin/dashboard');
+    }
+    return back()->with('error', 'Login gagal');
 });
 
+// =======================
+// ADMIN DASHBOARD
+// =======================
+Route::get('/admin/dashboard', function () {
+    if (!session('is_admin')) {
+        return redirect('/admin/login');
+    }
+    return view('admin.dashboard');
+});
+
+// =======================
+// ADMIN LOGOUT
+// =======================
+Route::post('/admin/logout', function () {
+    session()->forget('is_admin');
+    return redirect('/admin/login');
+});

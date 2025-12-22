@@ -27,16 +27,13 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    {{-- Header --}}
-    @include('partials.header')
 
     {{-- Main Content --}}
     <main class="min-h-screen">
         @yield('content')
     </main>
 
-    {{-- Footer --}}
-    @include('partials.footer')
+
 
     {{-- Scripts --}}
     @vite('resources/js/app.js')

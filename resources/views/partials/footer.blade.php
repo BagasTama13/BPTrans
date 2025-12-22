@@ -1,74 +1,79 @@
-<footer class="bg-brand-brown text-white py-14">
+<footer class="bg-black text-white py-14">
     <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
 
         {{-- Brand Logo & Description --}}
         <div>
-            <a href="#" target="_blank">
-                <img src="{{ asset('images/Logo2.png') }}" alt="Brand Logo" class="h-16 mb-4 cursor-pointer hover:scale-105 transition-transform">
+            <a href="#beranda-section">
+                <img src="{{ asset('images/Logo2.png') }}"
+                     alt="BP Transportation"
+                     class="h-16 mb-4 cursor-pointer hover:scale-105 transition-transform">
             </a>
+
             <p class="text-sm leading-relaxed">
-                Tempat kursus bahasa Inggris dengan konsep interaktif dan modern.
+                BP Transportation adalah layanan pengiriman barang lokal yang fokus pada
+                distribusi bahan baku dan produk jadi seperti kayu, serbuk gergaji,
+                batu bata, dan genteng dengan layanan cepat, tepat, dan terpercaya.
             </p>
 
-            <div class="flex gap-4 mt-4">
-                <a href="#" class="hover:opacity-70 transition">
-                    <img src="{{ asset('images/tiktok.svg') }}" class="h-6" alt="TikTok">
-                </a>
-                <a href="#" class="hover:opacity-70 transition">
-                    <img src="{{ asset('images/instagram.svg') }}" class="h-6" alt="Instagram">
-                </a>
-                <a href="#" class="hover:opacity-70 transition">
-                    <img src="{{ asset('images/whatsapp.svg') }}" class="h-6" alt="WhatsApp">
-                </a>
-            </div>
+
         </div>
 
-        {{-- Useful Links --}}
+        {{-- Navigasi --}}
         <div>
-            <h4 class="text-lg font-semibold mb-4">Tautan</h4>
+            <h4 class="text-lg font-semibold mb-4">Navigasi</h4>
             <ul class="space-y-2 text-sm">
-                <li><a href="#" class="hover:text-brand-orange transition">Tentang Kami</a></li>
-                <li><a href="#" class="hover:text-brand-orange transition">Fitur</a></li>
-                <li><a href="#" class="hover:text-brand-orange transition">Manfaat</a></li>
-                <li><a href="#" class="hover:text-brand-orange transition">Program</a></li>
+                <li><a href="#beranda-section" class="hover:text-brand-orange transition">Beranda</a></li>
+                <li><a href="#about-section" class="hover:text-brand-orange transition">Tentang Kami</a></li>
+                <li><a href="#layanan-section" class="hover:text-brand-orange transition">Layanan</a></li>
+                <li><a href="#etalase-section" class="hover:text-brand-orange transition">Etalase</a></li>
+                <li><a href="#ketentuan-section" class="hover:text-brand-orange transition">Ketentuan</a></li>
             </ul>
         </div>
 
-        {{-- Support --}}
+        {{-- Layanan --}}
         <div>
-            <h4 class="text-lg font-semibold mb-4">Dukungan</h4>
+            <h4 class="text-lg font-semibold mb-4">Layanan Kami</h4>
             <ul class="space-y-2 text-sm">
-                <li><a href="#" class="hover:text-brand-orange transition">Pusat Bantuan</a></li>
-                <li><a href="#" class="hover:text-brand-orange transition">Hubungi Kami</a></li>
-                <li><a href="#" class="hover:text-brand-orange transition">FAQ</a></li>
-                <li><a href="#" class="hover:text-brand-orange transition">Pembayaran</a></li>
-                <li><a href="#" class="hover:text-brand-orange transition">Website Resmi</a></li>
+                <li>Pengiriman Kayu & Serbuk Gergaji</li>
+                <li>Distribusi Batu Bata & Genteng</li>
+                <li>Pengiriman Barang Lokal</li>
+                <li>Pengiriman Tepat Waktu</li>
+                <li>
+                    <a href="/admin/login" class="hover:text-brand-orange transition">
+                        Akses Admin
+                    </a>
+                </li>
             </ul>
         </div>
 
-        {{-- Contact --}}
+        {{-- Kontak --}}
         <div>
             <h4 class="text-lg font-semibold mb-4">Informasi Kontak</h4>
+
             <ul class="space-y-4 text-sm">
-                <li class="flex gap-3">
-                    <img src="{{ asset('images/location.svg') }}" alt="Location" class="h-5 opacity-90">
-                    <span>Alamat Kosong</span>
+                <li class="flex gap-3 items-start">
+                    <i class="fas fa-location-dot mt-1 opacity-90"></i>
+                    <span>Dusun 2, Gemiring Kidul, Kec. Nalumsari, Kabupaten Jepara, Jawa Tengah 59466</span>
                 </li>
+
                 <li class="flex gap-3 items-center">
-                    <img src="{{ asset('images/telephone.svg') }}" alt="Phone" class="h-5 opacity-90">
-                    <span>Telepon Kosong</span>
+                    <i class="fas fa-phone opacity-90"></i>
+                    <span>0858-7765-3585</span>
                 </li>
+
                 <li class="flex gap-3 items-center">
-                    <img src="{{ asset('images/email.svg') }}" alt="Email" class="h-5 opacity-90">
-                    <span>Email Kosong</span>
+                    <i class="fas fa-envelope opacity-90"></i>
+                    <span>bptransportation@gmail.com</span>
                 </li>
             </ul>
+
         </div>
 
     </div>
 
     {{-- Footer Bottom --}}
     <div class="mt-10 border-t border-white/20 pt-5 text-center text-xs opacity-80">
-        © 2025 <a href="#" target="_blank">BrandName</a> — Semua Hak Dilindungi.
+        © {{ date('Y') }} <span class="font-semibold">BP Transportation</span> —
+        Semua Hak Dilindungi.
     </div>
 </footer>
