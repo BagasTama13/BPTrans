@@ -24,8 +24,6 @@
     @include('components.ketentuan')
 
 
-    {{-- ================= CONTACT ================= --}}
-    @include('components.contact')
 
 
     {{-- ================= FOOTER ================= --}}

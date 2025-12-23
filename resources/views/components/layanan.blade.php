@@ -50,7 +50,7 @@
                 <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-green-100 rounded-full">
                     <img src="{{ asset('images/perabot.jpg') }}" alt="Barang Besar" class="w-16 h-16 rounded-full">
                 </div>
-                <h3 class="text-xl font-semibold mb-2 text-green-800">Barang Besar & Banyak</h3>
+                <h3 class="text-xl font-semibold mb-2 text-green-800">Pengiriman Barang</h3>
                 <p class="text-gray-700 text-sm">
                     Pengiriman barang dalam kuantitas besar atau benda berukuran besar seperti motor, lemari, dan lainnya.
                 </p>

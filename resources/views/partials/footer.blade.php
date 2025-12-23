@@ -47,27 +47,40 @@
         </div>
 
         {{-- Kontak --}}
-        <div>
-            <h4 class="text-lg font-semibold mb-4">Informasi Kontak</h4>
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Informasi Kontak</h4>
 
-            <ul class="space-y-4 text-sm">
-                <li class="flex gap-3 items-start">
-                    <i class="fas fa-location-dot mt-1 opacity-90"></i>
-                    <span>Dusun 2, Gemiring Kidul, Kec. Nalumsari, Kabupaten Jepara, Jawa Tengah 59466</span>
-                </li>
+                <ul class="space-y-4 text-sm">
 
-                <li class="flex gap-3 items-center">
-                    <i class="fas fa-phone opacity-90"></i>
-                    <span>0858-7765-3585</span>
-                </li>
+                    <!-- Alamat -->
+                    <li class="flex gap-3 items-start">
+                        <i class="fas fa-location-dot mt-1 opacity-90"></i>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Dusun+2,+Gemiring+Kidul,+Kec.+Nalumsari,+Kabupaten+Jepara,+Jawa+Tengah+59466"
+                        target="_blank">
+                            Dusun 2, Gemiring Kidul, Kec. Nalumsari, Kabupaten Jepara, Jawa Tengah 59466
+                        </a>
+                    </li>
 
-                <li class="flex gap-3 items-center">
-                    <i class="fas fa-envelope opacity-90"></i>
-                    <span>bptransportation@gmail.com</span>
-                </li>
-            </ul>
+                    <!-- WhatsApp -->
+                    <li class="flex gap-3 items-center">
+                        <i class="fab fa-whatsapp opacity-90"></i>
+                        <a href="https://wa.me/6285877653585" target="_blank">
+                            0858-7765-3585
+                        </a>
+                    </li>
 
-        </div>
+                    <!-- Email -->
+                    <li class="flex gap-3 items-center">
+                        <i class="fas fa-envelope opacity-90"></i>
+                        <a href="mailto:bptransportation@gmail.com">
+                            bptransportation@gmail.com
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+
 
     </div>
 
