@@ -4,20 +4,24 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('riwayat', function (Blueprint $table) {
+        Schema::create('admin_activities', function (Blueprint $table) {
             $table->id();
-            $table->string('aksi');
-            $table->string('judul');
-            $table->json('detail')->nullable();
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('riwayat');
+        Schema::dropIfExists('admin_activities');
     }
 };

@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Riwayat extends Model
 {
-    use HasFactory;
+    protected $table = 'riwayat';
 
-    protected $table = 'riwayat'; // nama table tunggal
     protected $fillable = [
-        'tipe_aktivitas',
-        'keterangan',
+        'aksi',
+        'judul',
+        'detail'
+    ];
+
+    protected $casts = [
+        'detail' => 'array'
     ];
 }

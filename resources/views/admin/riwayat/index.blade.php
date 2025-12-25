@@ -1,31 +1,75 @@
 @extends('admin.layout')
 
 @section('content')
-<div class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-4">Riwayat Aktivitas</h1>
+<div class="p-8 max-w-5xl mx-auto">
+    <h1 class="text-2xl font-semibold mb-6">Riwayat Aktivitas Admin</h1>
 
-    @if($riwayat->isEmpty())
-        <p>Tidak ada aktivitas.</p>
-    @else
-        <ul class="space-y-2">
-            @foreach($riwayat as $item)
-                <li class="bg-white shadow p-4 rounded-lg cursor-pointer hover:bg-gray-50"
-                    onclick="toggleDetail({{ $item->id }})">
-                    <strong>{{ $item->tipe_aktivitas }}</strong>
+    <div class="space-y-4">
+        @forelse($riwayat as $item)
 
-                    <div id="detail-{{ $item->id }}" class="hidden mt-2 text-sm text-gray-600">
-                        {{ $item->keterangan }}
-                    </div>
-                </li>
-            @endforeach
-        </ul>
-    @endif
+            @php
+                $namaProduk = is_array($item->detail) && isset($item->detail['produk'])
+                    ? $item->detail['produk']
+                    : $item->judul;
+
+                $waktu = $item->created_at->format('d-m-Y H:i');
+            @endphp
+
+            <div class="flex gap-4 items-start p-4 bg-gray-50 rounded-lg">
+                <!-- Icon -->
+                <div class="mt-1">
+                    @if(str_contains(strtolower($item->aksi), 'tambah'))
+                        <span class="text-green-600">➕</span>
+                    @elseif(str_contains(strtolower($item->aksi), 'update'))
+                        <span class="text-blue-600">✏️</span>
+                    @elseif(str_contains(strtolower($item->aksi), 'hapus'))
+                        <span class="text-red-600">🗑️</span>
+                    @else
+                        <span class="text-gray-500">📌</span>
+                    @endif
+                </div>
+
+                <!-- Content -->
+                <div class="flex-1">
+                    @if(str_contains(strtolower($item->aksi), 'tambah'))
+                        <p>
+                            Admin <strong>menambahkan</strong> produk
+                            <strong>{{ $namaProduk }}</strong>
+                        </p>
+
+                    @elseif(str_contains(strtolower($item->aksi), 'update'))
+                        <p>
+                            Admin <strong>memperbarui</strong> produk
+                            <strong>{{ $namaProduk }}</strong>
+                        </p>
+
+                    @elseif(str_contains(strtolower($item->aksi), 'hapus'))
+                        <p>
+                            Admin <strong>menghapus</strong> produk
+                            <strong>{{ $namaProduk }}</strong>
+                        </p>
+
+                    @elseif(str_contains(strtolower($item->aksi), 'pesanan'))
+                        <p>
+                            Admin <strong>memperbarui</strong> pesanan
+                            <strong>{{ $item->judul }}</strong>
+                        </p>
+
+                    @else
+                        <p>{{ $item->aksi }} - {{ $item->judul }}</p>
+                    @endif
+
+                    <p class="text-xs text-gray-500 mt-1">
+                        {{ $waktu }}
+                    </p>
+                </div>
+            </div>
+
+        @empty
+            <div class="text-center text-gray-500 py-10">
+                Belum ada riwayat aktivitas
+            </div>
+        @endforelse
+    </div>
 </div>
-
-<script>
-    function toggleDetail(id) {
-        const el = document.getElementById('detail-' + id);
-        el.classList.toggle('hidden');
-    }
-</script>
 @endsection
