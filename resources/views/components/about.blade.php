@@ -16,7 +16,7 @@
 
             {{-- Gambar ilustrasi --}}
             <div class="flex justify-center">
-                <img src="{{ asset('images/truck_delivery.png') }}" alt="BP Transportation" class="rounded-xl shadow-lg max-w-full">
+                <img src="{{ asset('images/pick-up2.png') }}" alt="BP Transportation" class="rounded-xl shadow-lg max-w-full">
             </div>
 
             {{-- Visi & Misi --}}

@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pesanan', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('pesanan', function (Blueprint $table) {
+            //
         });
     }
 
@@ -22,6 +21,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pesanan');
+Schema::table('pesanan', function (Blueprint $table) {
+    $table->enum('status_pengiriman', ['antrian','diproses','dikirim','terkirim'])
+          ->nullable()
+          ->after('status');
+});
+
+    
     }
 };

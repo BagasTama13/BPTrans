@@ -14,52 +14,119 @@ use App\Models\Riwayat;
 
 // Beranda
 Route::get('/', function () {
-    return view('beranda');
-})->name('home');
+    return view('dashboard');
+})->name('dashboard');
 
-// Etalase publik
-Route::get('/etalase', function () {
-    $products = Product::latest()->get();
-    return view('etalase', compact('products'));
-})->name('etalase');
+// Halaman pilih produk
+Route::get('/pesan', function () {
+    $produkList = Product::all();
+    return view('components.pesan', compact('produkList'));
+})->name('pesan.index');
+//pengambilan data untuk halaman pesan
+Route::get('/pesan', function () {
 
-// Form Pesanan
-Route::get('/pesanan', function () {
-    return view('pesanan');
-})->name('pesanan');
+    $produkList = Product::all()
+        ->groupBy('nama_produk')
+        ->map(function ($items) {
+            return [
+                'nama_produk' => $items->first()->nama_produk,
+                'harga_min'  => $items->min('harga'),
+                'harga_max'  => $items->max('harga'),
+                'image'      => $items->first()->image,
+            ];
+        });
 
-// Simpan Pesanan
-Route::post('/pesanan/store', function (Request $request) {
+    return view('components.pesan', compact('produkList'));
+})->name('pesan.index');
+
+
+/*
+|--------------------------------------------------------------------------
+| Form Pemesanan
+|--------------------------------------------------------------------------
+*/
+Route::get('/pemesanan', function (Request $request) {
+
+    $produkList = Product::all();
+    $namaProduk = $request->query('produk');
+
+    // Ambil tipe produk sesuai produk yang dipilih
+    $tipeProduk = [];
+    if ($namaProduk) {
+        $tipeProduk = Product::where('nama_produk', $namaProduk)
+            ->pluck('tipe_produk');
+    }
+
+    return view('components.pemesanan', compact(
+        'produkList',
+        'namaProduk',
+        'tipeProduk'
+    ));
+
+})->name('pemesanan.index');
+
+/*
+|--------------------------------------------------------------------------
+| Simpan Pesanan
+|--------------------------------------------------------------------------
+*/
+Route::post('/pemesanan', function (Request $request) {
+
     $request->validate([
-        'nama_pembeli' => 'required|string',
-        'no_hp'        => 'required|string',
-        'alamat'       => 'required|string',
-        'jenis_produk' => 'required|string',
-        'tipe_produk'  => 'nullable|string',
-        'jumlah'       => 'required|numeric',
+        'nama_pembeli'        => 'required|string|max:255',
+        'produk'              => 'required|string|max:255',
+        'tipe'                => 'nullable|string|max:255',
+        'jumlah'              => 'nullable|integer|min:1',
+        'alamat'              => 'required|string|max:255',
+        'alamat_penjemputan'  => 'nullable|string|max:255',
+        'catatan'             => 'nullable|string',
+        'whatsapp'            => 'required|string|max:20',
     ]);
 
-    $pesanan = Pesanan::create([
-        'nama_pembeli' => $request->nama_pembeli,
-        'no_hp'        => $request->no_hp,
-        'alamat'       => $request->alamat,
-        'jenis_produk' => $request->jenis_produk,
-        'tipe_produk'  => $request->tipe_produk,
-        'jumlah'       => $request->jumlah,
-        'status'       => 'proses',
+    $produk = Product::where('nama_produk', $request->produk)->firstOrFail();
+
+    // Tentukan satuan
+    $satuan = null;
+    if ($request->jumlah) {
+        $satuan = match ($produk->nama_produk) {
+            'kayu' => 'bak',
+            default => 'pcs',
+        };
+    }
+
+    // Default NULL untuk kolom tipe
+    $tipeBatuBata   = null;
+    $jenisGenteng   = null;
+    $jenisPengiriman = null;
+
+    // Mapping tipe berdasarkan produk
+    if ($produk->nama_produk === 'batu bata') {
+        $tipeBatuBata = $request->tipe;
+    } elseif ($produk->nama_produk === 'genteng') {
+        $jenisGenteng = $request->tipe;
+    } elseif ($produk->nama_produk === 'pengiriman') {
+        $jenisPengiriman = $request->tipe;
+    }
+
+    Pesanan::create([
+        'nama_pembeli'        => $request->nama_pembeli,
+        'produk'              => $produk->nama_produk,
+        'tipe_batu_bata'      => $tipeBatuBata,
+        'jenis_genteng'       => $jenisGenteng,
+        'jenis_pengiriman'    => $jenisPengiriman,
+        'jumlah'              => $request->jumlah,
+        'satuan'              => $satuan,
+        'alamat'              => $request->alamat,
+        'alamat_penjemputan'  => $request->alamat_penjemputan,
+        'catatan'             => $request->catatan,
+        'whatsapp'            => $request->whatsapp,
+        'status'              => 'pending',
     ]);
 
-    Riwayat::create([
-        'aksi'  => 'Pesanan Masuk',
-        'judul' => $pesanan->nama_pembeli,
-        'detail'=> [
-            'keterangan' => 'Pesanan baru dibuat',
-            'pesanan_id' => $pesanan->id,
-        ],
-    ]);
+    return redirect()->route('pemesanan.index')
+        ->with('success', 'Pesanan berhasil dikirim!');
+})->name('pemesanan.store');
 
-    return back()->with('success', 'Pesanan berhasil dikirim!');
-})->name('pesanan.store');
 
 /*
 |--------------------------------------------------------------------------
@@ -80,10 +147,11 @@ Route::post('/admin/login', function (Request $request) {
     return back()->with('error', 'Login gagal');
 })->name('admin.login.process');
 
-Route::get('/admin/logout', function () {
+Route::post('/admin/logout', function () {
     session()->forget('is_admin');
     return redirect()->route('admin.login');
 })->name('admin.logout');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +165,37 @@ Route::get('/admin/dashboard', function () {
     }
 
     return view('admin.dashboard');
+})->name('admin.dashboard');
+
+Route::get('/admin/dashboard', function (Request $request) {
+
+    if (!session('is_admin')) {
+        return redirect()->route('admin.login');
+    }
+
+    $status = $request->query('status');
+
+    // Ringkasan status
+    $totalPending  = Pesanan::where('status', 'pending')->count();
+    $totalDiterima = Pesanan::where('status', 'diterima')->count();
+    $totalDitolak  = Pesanan::where('status', 'ditolak')->count();
+
+    // List pesanan hanya jika klik card
+    $pesanans = null;
+
+    if (in_array($status, ['pending', 'diterima', 'ditolak'])) {
+        $pesanans = Pesanan::where('status', $status)
+            ->latest()
+            ->get();
+    }
+
+    return view('admin.dashboard', compact(
+        'totalPending',
+        'totalDiterima',
+        'totalDitolak',
+        'pesanans',
+        'status'
+    ));
 })->name('admin.dashboard');
 
 /*
@@ -232,57 +331,183 @@ Route::delete('/admin/etalase/{product}', function (Product $product) {
     return back()->with('success', 'Produk berhasil dihapus');
 })->name('admin.etalase.destroy');
 
+
 /*
 |--------------------------------------------------------------------------
 | ADMIN PESANAN
 |--------------------------------------------------------------------------
 */
 
+
+/*
+|--------------------------------------------------------------------------
+| LIST PESANAN (HANYA YANG SUDAH DITERIMA)
+|--------------------------------------------------------------------------
+*/
 Route::get('/admin/pesanan', function () {
     if (!session('is_admin')) {
         return redirect()->route('admin.login');
     }
 
-    $pesanan = Pesanan::latest()->get();
+    $pesanan = Pesanan::where('status', 'diterima')
+        ->latest()
+        ->get();
+
     return view('admin.pesanan.index', compact('pesanan'));
 })->name('admin.pesanan');
 
-// Form Edit Pesanan
+
+/*
+|--------------------------------------------------------------------------
+| LIST PESANAN PENDING (UNTUK DIPUTUSKAN ADMIN)
+|--------------------------------------------------------------------------
+*/
+Route::get('/admin/pesanan/pending', function () {
+    if (!session('is_admin')) {
+        return redirect()->route('admin.login');
+    }
+
+    $pesanan = Pesanan::where('status', 'pending')
+        ->latest()
+        ->get();
+
+    return view('admin.pesanan.pending', compact('pesanan'));
+})->name('admin.pesanan.pending');
+
+
+/*
+|--------------------------------------------------------------------------
+| TERIMA PESANAN
+|--------------------------------------------------------------------------
+*/
+Route::put('/admin/pesanan/{pesanan}/terima', function (Pesanan $pesanan) {
+
+    if (!session('is_admin')) {
+        return redirect()->route('admin.login');
+    }
+
+    // proteksi status
+    if ($pesanan->status !== 'pending') {
+        abort(403, 'Pesanan tidak valid');
+    }
+
+    // update status pesanan
+    $pesanan->update([
+        'status' => 'diterima',
+        'status_pengiriman' => 'antrian',
+    ]);
+
+    // simpan ke riwayat
+    Riwayat::create([
+        'aksi'   => 'Pesanan Diterima',
+        'judul' => $pesanan->nama_pembeli,
+        'detail'=> json_encode([
+            'pesanan_id' => $pesanan->id,
+            'produk'     => $pesanan->produk,
+            'status'     => 'diterima',
+        ]),
+    ]);
+
+    // 🔥 REDIRECT LANGSUNG KE HALAMAN PESANAN
+    return redirect('/admin/pesanan')
+        ->with('success', 'Pesanan berhasil diterima');
+
+})->name('admin.pesanan.terima');
+
+
+/*
+|--------------------------------------------------------------------------
+| TOLAK PESANAN
+|--------------------------------------------------------------------------
+*/
+Route::put('/admin/pesanan/{pesanan}/tolak', function (Pesanan $pesanan) {
+
+    if (!session('is_admin')) {
+        return redirect()->route('admin.login');
+    }
+
+    if ($pesanan->status !== 'pending') {
+        abort(403, 'Pesanan tidak valid');
+    }
+
+    // update status
+    $pesanan->update([
+        'status' => 'ditolak',
+    ]);
+
+    // simpan ke riwayat
+    Riwayat::create([
+        'aksi'   => 'Pesanan Ditolak',
+        'judul' => $pesanan->nama_pembeli,
+        'detail'=> json_encode([
+            'pesanan_id' => $pesanan->id,
+            'produk'     => $pesanan->produk,
+            'status'     => 'ditolak',
+        ]),
+    ]);
+
+    // 🔥 REDIRECT LANGSUNG KE RIWAYAT
+    return redirect('/admin/riwayat')
+        ->with('success', 'Pesanan berhasil ditolak');
+
+})->name('admin.pesanan.tolak');
+
+/*
+|--------------------------------------------------------------------------
+| FORM EDIT STATUS PENGIRIMAN
+|--------------------------------------------------------------------------
+*/
 Route::get('/admin/pesanan/{pesanan}/edit', function (Pesanan $pesanan) {
     if (!session('is_admin')) {
         return redirect()->route('admin.login');
     }
 
+    if ($pesanan->status !== 'diterima') {
+        abort(403);
+    }
+
     return view('admin.pesanan.edit', compact('pesanan'));
 })->name('admin.pesanan.edit');
 
-// Update Status Pesanan
+
+/*
+|--------------------------------------------------------------------------
+| UPDATE STATUS PENGIRIMAN
+|--------------------------------------------------------------------------
+*/
 Route::put('/admin/pesanan/{pesanan}', function (Request $request, Pesanan $pesanan) {
     if (!session('is_admin')) {
         return redirect()->route('admin.login');
     }
 
+    // Pastikan hanya pesanan diterima yang bisa diubah status pengirimannya
+    if ($pesanan->status !== 'diterima') {
+        abort(403);
+    }
+
     $request->validate([
-        'status' => 'required|in:proses,pengiriman,terkirim,ditolak',
+        'status_pengiriman' => 'required|in:antrian,diproses,dikirim,terkirim',
     ]);
 
+    // Simpan ke database
     $pesanan->update([
-        'status' => $request->status,
+        'status_pengiriman' => $request->status_pengiriman,
     ]);
 
+    // Catat riwayat
     Riwayat::create([
-        'aksi'  => 'Update Pesanan',
+        'aksi'  => 'update pengiriman',
         'judul' => $pesanan->nama_pembeli,
         'detail'=> [
-            'keterangan' => 'Update status pesanan',
-            'pesanan_id' => $pesanan->id,
-            'status'     => $request->status,
+            'pesanan_id'         => $pesanan->id,
+            'status_pengiriman'  => $request->status_pengiriman,
         ],
     ]);
 
     return redirect()->route('admin.pesanan')
-        ->with('success', 'Status pesanan diperbarui');
+        ->with('success', 'Status pengiriman diperbarui');
 })->name('admin.pesanan.update');
+
 
 /*
 |--------------------------------------------------------------------------

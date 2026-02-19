@@ -22,13 +22,13 @@
                 </p>
 
                 <div class="flex flex-wrap gap-4">
-                    <a href="#kontak-section"
+                    <a href="https://wa.me/6285877653585" target="_blank"
                        class="px-7 py-3 bg-green-800 text-white font-semibold
                               rounded-lg hover:bg-green-700 transition">
                         Hubungi Kami
                     </a>
 
-                    <a href="#etalase-section"
+                    <a href="{{ route('pesan.index') }}"
                        class="px-7 py-3 border border-white/30 text-white
                               rounded-lg hover:bg-white/10 transition">
                         Lihat Etalase

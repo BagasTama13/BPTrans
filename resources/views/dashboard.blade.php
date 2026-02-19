@@ -4,29 +4,16 @@
 
 @section('content')
 
-    {{-- ================= HEADER / NAVBAR ================= --}}
+    {{-- Header / Navbar --}}
     @include('partials.header')
 
-
-    {{-- ================= BERANDA ================= --}}
+    {{-- Sections --}}
     @include('components.beranda')
-
-
-    {{-- ================= ABOUT ================= --}}
     @include('components.about')
-
-
-    {{-- ================= LAYANAN ================= --}}
     @include('components.layanan')
-
-
-    {{-- ================= LOKASI ================= --}}
     @include('components.ketentuan')
 
-
-
-
-    {{-- ================= FOOTER ================= --}}
+    {{-- Footer --}}
     @include('partials.footer')
 
 @endsection

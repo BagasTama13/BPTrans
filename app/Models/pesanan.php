@@ -12,17 +12,21 @@ class Pesanan extends Model
     // Tentukan nama tabel secara eksplisit
     protected $table = 'pesanan';
 
-    protected $fillable = [
-        'nama_pembeli',
-        'jenis_produk',
-        'tipe_produk',
-        'jumlah',
-        'satuan',
-        'alamat_penjemputan',
-        'alamat_tujuan',
-        'kontak',
-        'detail',
-        'harga',
-        'status',
-    ];
+    // Field yang bisa diisi mass-assignment
+        protected $fillable = [
+            'nama_pembeli',
+            'produk',
+            'tipe_batu_bata',
+            'jenis_genteng',
+            'tipe_produk',
+            'jumlah',
+            'satuan',
+            'alamat',
+            'alamat_penjemputan', // tambahkan ini
+            'catatan',
+            'whatsapp',
+            'harga',
+            'status',
+        ];
+
 }
